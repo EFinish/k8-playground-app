@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Press Counter</title>
+    <style>
+        #button {
+            font-size: 24px;
+            font-family: 'Pacifico', cursive;
+        }
+    </style>
+</head>
+<body>
+    <h1>Button Press Counter</h1>
+    <p>The button has been pressed <strong id="potato">Loading...</strong></p>
+    <form action="/button-presses" method="post">
+        <button id="button" type="submit">The Button</button>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const dataDiv = document.getElementById('potato');
+
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    fetch('/button-presses')
+                        .then(response => response.json())
+                        .then(data => {
+                            dataDiv.innerHTML = `${data.message} times`;
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            dataDiv.innerHTML = `Error loading data`;
+                        });
+                    observer.disconnect();
+                }
+            });
+
+            observer.observe(dataDiv);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: potatoweb-load-balancer
+  labels:
+    app: potato
+    tier: web
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: potato
+    tier: web
